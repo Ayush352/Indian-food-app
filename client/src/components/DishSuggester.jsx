@@ -14,8 +14,12 @@ const DishSuggester = () => {
   };
 
   const suggest = async () => {
-    const res = await api.post("/dishes/suggest", { ingredients });
-    setResults(res.data);
+    try {
+      const res = await api.post("/dishes/suggest", { ingredients });
+      setResults(res.data);
+    } catch (err) {
+      setResults([]);
+    }
   };
 
   return (
@@ -28,9 +32,11 @@ const DishSuggester = () => {
         {ingredients.map((ing, i) => <li key={i}>{ing}</li>)}
       </ul>
       <h4>Possible Dishes:</h4>
-      <ul>
-        {results.map((dish, i) => <li key={i}>{dish.name}</li>)}
-      </ul>
+      {results.length > 0 && (
+        <ul>
+          {results.map((dish, i) => <li key={i}>{dish.name}</li>)}
+        </ul>
+      )}
     </div>
   );
 };
